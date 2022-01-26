@@ -22,18 +22,18 @@ impl Display for CustomResponse {
 
 impl Shorten for String {
     fn shorten(&self) -> String {
-        String::from(&self[..50])
+        self[..50].to_string()
     }
 }
 
-fn get_response(url: String) -> Result<CustomResponse, reqwest::Error> {
+fn get_response(url: &str) -> Result<CustomResponse, reqwest::Error> {
     let res = reqwest::blocking::get(url)?;
     let version: reqwest::Version = res.version();
     let headers = res.headers().clone();
     let status_code = res.status();
     let text = res.text()?;
     let my_response = CustomResponse {
-        text: String::from(text),
+        text: text,
         version: version,
         headers: headers,
         status_code: status_code,
@@ -42,7 +42,7 @@ fn get_response(url: String) -> Result<CustomResponse, reqwest::Error> {
 }
 
 impl CustomResponse {
-    fn print_response(url: String) {
+    fn print_response(url: &str) {
         match get_response(url) {
             Ok(x) => println!("{}", x),
             _ => panic!(),
@@ -51,5 +51,5 @@ impl CustomResponse {
 }
 
 fn main() {
-    CustomResponse::print_response(String::from("https://www.example.com/"))
+    CustomResponse::print_response("https://www.example.com/")
 }
