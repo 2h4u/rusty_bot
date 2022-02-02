@@ -2,6 +2,7 @@ use std::fmt::Display;
 
 use scraper::Html;
 use scraper::Selector;
+mod parser;
 
 struct CustomResponse {
     text: String,
@@ -91,5 +92,16 @@ fn parse(url: &str) {
 fn main() {
     //CustomResponse::print_response("https://www.example.com/")
 
+    parser::parse("");
+
     parse("https://www.example.com/");
+}
+
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn very_first_test_function() {
+        assert!(true);
+    }
 }
