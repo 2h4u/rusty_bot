@@ -1,23 +1,27 @@
+use crate::parsers::Parser;
 use scraper::Html;
 use scraper::Selector;
 
-pub fn parse(html: &str) -> Vec<String> {
+pub struct HtmlParser {}
 
-    
-    // let document = Html::parse_document(html.as_str());
-    // let selector = Selector::parse(r#"div[id="skip-to-resultlist"]"#).unwrap();
+impl Parser<String> for HtmlParser {
+    fn parse(&self, html: &str) -> Vec<String> {
+        let document = Html::parse_document(html);
+        let selector = Selector::parse(r#"div[class="content"]"#).unwrap();
+        let selection = document.select(&selector);
 
-    vec![String::from("test123")]
-}  
+        selection
+            .map(|item| item.inner_html())
+            .collect::<Vec<String>>()
+    }
+}
 
 #[cfg(test)]
 mod tests {
-    use std::ops::RangeBounds;
     use super::*;
 
     #[test]
     fn test_parse() {
-
         let html = r#"
     <!DOCTYPE html>
     <meta charset="utf-8">
@@ -28,7 +32,8 @@ mod tests {
     <div class="content">content3</div>
 "#;
 
-        let items = parse(html);
+        let parser = HtmlParser {};
+        let items = parser.parse(html);
 
         assert!(items.len() == 3);
         assert!(items.contains(&String::from("content1")));

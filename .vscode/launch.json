@@ -10,7 +10,8 @@
             "name": "Debug",
             "program": "${workspaceFolder}/target/debug/rusty_bot",
             "args": [],
-            "cwd": "${workspaceFolder}"
+            "cwd": "${workspaceFolder}/target/debug/",
+            "sourceLanguages": ["rust"]
         }
     ]
 }

@@ -2,7 +2,8 @@ use std::fmt::Display;
 
 use scraper::Html;
 use scraper::Selector;
-mod parser;
+mod parsers;
+use parsers::Parser;
 
 struct CustomResponse {
     text: String,
@@ -16,11 +17,15 @@ trait Shorten {
 }
 
 impl Display for CustomResponse {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::result::Result<(), std::fmt::Error> { 
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::result::Result<(), std::fmt::Error> {
         let short_string = self.text.shorten();
         // Same as:
         // let short_string = &self.text[..50];
-        write!(f, "{:?} - {} - {:?} - {}", self.version, self.status_code, self.headers, short_string)
+        write!(
+            f,
+            "{:?} - {} - {:?} - {}",
+            self.version, self.status_code, self.headers, short_string
+        )
     }
 }
 
@@ -76,27 +81,43 @@ fn parse(url: &str) {
 
      */
 
-   // let element_value = element.value();
+    // let element_value = element.value();
 
-    println!("{:#?}", element_text.first_child().unwrap().value().as_text().unwrap());
-    println!("#######################################################################################");
+    println!(
+        "{:#?}",
+        element_text
+            .first_child()
+            .unwrap()
+            .value()
+            .as_text()
+            .unwrap()
+    );
+    println!("###################################################################################");
 
     println!("{:#?}", element.value());
-    println!("#######################################################################################");
-    println!("{:#?}", element.first_child().unwrap().first_child().unwrap().first_child().unwrap().value());
-    println!("#######################################################################################");
+    println!("###################################################################################");
+    println!(
+        "{:#?}",
+        element
+            .first_child()
+            .unwrap()
+            .first_child()
+            .unwrap()
+            .first_child()
+            .unwrap()
+            .value()
+    );
+    println!("###################################################################################");
     println!("{:#?}", element.html());
-    println!("#######################################################################################");
+    println!("###################################################################################");
 }
 
 fn main() {
     //CustomResponse::print_response("https://www.example.com/")
 
-    parser::parse("");
-
-    parse("https://www.example.com/");
+    let parser = parsers::html_parser::HtmlParser {};
+    parser.parse("https://www.example.com/");
 }
-
 
 #[cfg(test)]
 mod tests {
